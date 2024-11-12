@@ -1,0 +1,13 @@
+{
+	"collections":	[{
+			"collectionName":	"pets",
+			"documents":	[{
+					"documentId":	"fringus",
+					"fields":	[{
+							"key":	"name",
+							"type":	1,
+							"value":	"Fringus"
+						}]
+				}]
+		}]
+}

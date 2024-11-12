@@ -1,0 +1,22 @@
+{
+	"collectionName":	"pets",
+	"documents":	[{
+			"documentId":	"doc1",
+			"fields":	[{
+					"key":	"age",
+					"value":	5
+				}, {
+					"key":	"name",
+					"value":	"Fringus"
+				}]
+		}, {
+			"documentId":	"doc2",
+			"fields":	[{
+					"key":	"age",
+					"value":	3
+				}, {
+					"key":	"name",
+					"value":	"Helixio"
+				}]
+		}]
+}
