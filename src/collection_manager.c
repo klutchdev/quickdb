@@ -30,26 +30,39 @@ Collection *getCollection(CollectionManager *manager, const char *name)
   return NULL;
 }
 
-void deleteCollectionFromManager(CollectionManager *manager, const char *name)
+void deleteCollectionFromManager(CollectionManager *manager, const char *collectionName)
 {
+  printf("Attempting to delete collection: %s\n", collectionName);
   for (size_t i = 0; i < manager->collectionCount; i++)
   {
-    if (strcmp(manager->collections[i].collectionName, name) == 0)
+    if (strcmp(manager->collections[i].collectionName, collectionName) == 0)
     {
+      // Free the collection and all its documents
       freeCollection(&manager->collections[i]);
+
+      // Shift the remaining collections
       for (size_t j = i; j < manager->collectionCount - 1; j++)
       {
         manager->collections[j] = manager->collections[j + 1];
       }
+
       manager->collectionCount--;
-      manager->collections = (Collection *)realloc(manager->collections, manager->collectionCount * sizeof(Collection));
+      manager->collections = realloc(manager->collections, manager->collectionCount * sizeof(Collection));
+
+      if (manager->collectionCount > 0 && manager->collections == NULL)
+      {
+        printf("Error reallocating memory for collections.\n");
+        exit(1);
+      }
       return;
     }
   }
+  printf("Collection '%s' not found.\n", collectionName);
 }
 
 void freeCollectionManager(CollectionManager *manager)
 {
+  printf("Freeing collections");
   for (size_t i = 0; i < manager->collectionCount; i++)
   {
     freeCollection(&manager->collections[i]);

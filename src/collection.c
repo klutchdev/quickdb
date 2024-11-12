@@ -4,6 +4,8 @@
 #include "collection.h"
 #include "document.h"
 
+static const char *sortFieldName;
+
 Collection *createCollection(const char *name)
 {
   Collection *collection = (Collection *)malloc(sizeof(Collection));
@@ -68,6 +70,58 @@ Document **findDocumentsByField(Collection *collection, const char *fieldKey, vo
   return results;
 }
 
+int compareDocuments(const void *a, const void *b)
+{
+  Document *docA = (Document *)a;
+  Document *docB = (Document *)b;
+
+  Field *fieldA = NULL;
+  Field *fieldB = NULL;
+
+  // Find the specified field in both documents
+  for (size_t i = 0; i < docA->fieldCount; i++)
+  {
+    if (strcmp(docA->fields[i].key, sortFieldName) == 0)
+    {
+      fieldA = &docA->fields[i];
+      break;
+    }
+  }
+
+  for (size_t i = 0; i < docB->fieldCount; i++)
+  {
+    if (strcmp(docB->fields[i].key, sortFieldName) == 0)
+    {
+      fieldB = &docB->fields[i];
+      break;
+    }
+  }
+
+  if (!fieldA || !fieldB)
+  {
+    return 0; // If either document doesn't have the field, consider them equal
+  }
+
+  // Compare based on field type
+  if (fieldA->type == TYPE_INT && fieldB->type == TYPE_INT)
+  {
+    return fieldA->value.intValue - fieldB->value.intValue;
+  }
+  else if (fieldA->type == TYPE_STRING && fieldB->type == TYPE_STRING)
+  {
+    return strcmp(fieldA->value.stringValue, fieldB->value.stringValue);
+  }
+
+  return 0;
+}
+
+// Wrapper function for qsort with custom field
+void sortDocumentsByField(Collection *collection, const char *fieldName)
+{
+  sortFieldName = fieldName; // Set the global static variable to the field name
+  qsort(collection->documents, collection->documentCount, sizeof(Document), compareDocuments);
+}
+
 void deleteDocumentFromCollection(Collection *collection, const char *documentId)
 {
   for (size_t i = 0; i < collection->documentCount; i++)
@@ -99,8 +153,7 @@ void freeCollection(Collection *collection)
 {
   for (size_t i = 0; i < collection->documentCount; i++)
   {
-    freeDocument(&collection->documents[i]);
+    freeDocument(&collection->documents[i]); // Free each document in the collection
   }
-  free(collection->documents);
-  free(collection);
+  free(collection->documents); // Free the documents array
 }
