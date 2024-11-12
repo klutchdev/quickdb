@@ -21,7 +21,7 @@
 						}, {
 							"key":	"difficulty",
 							"type":	1,
-							"value":	"oderate"
+							"value":	"moderate"
 						}]
 				}, {
 					"documentId":	"lumos",
