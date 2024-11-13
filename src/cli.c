@@ -212,7 +212,7 @@ void enterPowerUserMode(CollectionManager *manager)
 
     while (1)
     {
-        printf(">> ");
+        printf("$ ");
         fgets(command, sizeof(command), stdin);
         command[strcspn(command, "\n")] = '\0';
 
@@ -435,6 +435,7 @@ void parseCommand(CollectionManager *manager, char *command)
     else if (strcmp(token, "delete") == 0)
     {
         char *subCommand = strtok(NULL, " ");
+
         if (subCommand == NULL || strcmp(subCommand, "document") != 0)
         {
             printf("Error: Invalid syntax for 'delete'. Expected 'delete document <collection> <docId>'.\n");
@@ -443,6 +444,7 @@ void parseCommand(CollectionManager *manager, char *command)
 
         char *collectionName = strtok(NULL, " ");
         char *docId = strtok(NULL, " ");
+
         if (collectionName == NULL || docId == NULL)
         {
             printf("Error: Collection name and document ID are required.\n");
@@ -450,6 +452,7 @@ void parseCommand(CollectionManager *manager, char *command)
         }
 
         Collection *collection = getCollection(manager, collectionName);
+
         if (!collection)
         {
             printf("Collection '%s' not found.\n", collectionName);
