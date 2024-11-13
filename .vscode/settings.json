@@ -1,13 +1,5 @@
 {
   "files.associations": {
-    "*.sql": "sql",
-    "*.css": "css",
-    "*.json": "json",
-    "*.dart": "dart",
-    "*.js": "javascript",
-    "*.ts": "typescript",
-    "*.jsx": "javascriptreact",
-    "*.tsx": "typescriptreact",
     "typeinfo": "c",
     "stdio.h": "c",
     "string.h": "c",
